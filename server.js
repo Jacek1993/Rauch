@@ -3,6 +3,7 @@ var bodyParser=require('body-parser');
 const {ObjectID}=require('mongodb');
 const winston=require('winston');
 var morgan=require('morgan');
+require('./config/config');
 
 var {mongoose}=require('./db/mongoose');
 var {Client}=require('./models/Client');
@@ -36,7 +37,7 @@ app.use(bodyParser.json());
 app.use(morgan('combined', {stream: logger.stream}));
 app.use('/room', room);
 
-
+console.log(process.env.JWT_SECRET);
 
 app.listen(port, ()=>{
     console.log(`Started on port ${port}`);
