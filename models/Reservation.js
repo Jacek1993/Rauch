@@ -1,25 +1,28 @@
 var mongoose=require('mongoose');
 
-var Reservation=mongoose.model('Reservation',{
-    identifier:{
+var Reservation=mongoose.model('Reservation', {
+    firstName:{
         type: String,
-        required: true,
-        minlength: 3,
-        trim: true
+        required: true
     },
-    placesNumber:{
-        type: String,
-        required: true,
-        minlength: 1,
-        trim: true
+    lastName: {
+        String
     },
-    roomNumber:{
-        type: String,
-        required: true,
-        minlength: 3,
-        trim: true
+    startDate:{
+        type: Date,
+        default: Date.now()},
+    finishDate:{
+        type: Date
+    },
+    personAmount:{
+        Number
+    },
+    duration:{
+        Number
+    },
+    _creattor: {
+       type:  mongoose.Schema.Types.ObjectId
     }
-
 });
 
 module.exports={Reservation};

@@ -3,46 +3,43 @@ var mongoose=require('mongoose');
 var Client=mongoose.model('Client',{
     fistName:{
         type: String,
-        required: true,
-        minlength: 3,
-        trim: true
+
     },
     lastName:{
         type: String,
-        required: true,
-        minlength: 3,
-        trim: true
+
     },
     email:{
         type: String,
-        required: true,
-        minlength: 5,
-        trim: true
+
     },
     telephoneNumber:{
         type: String,
-        required: true,
-        minlength: 9,
-        trim: true
+
     },
     login:{
         type:String,
-        required: true,
-        minlength: 3,
-        trim: true
+
     },
+    reservation:[{
+        type: mongoose.Schema.Types.ObjectId
+    }],
     password:{
         type: String,
         required: true,
-        minlength: 3,
-        trim: true
+        minlength: 6
     },
-    reservationNumber:{
-        type: String,
-        required: true,
-        minlength: 6,
-        trim: true
-    }
+    tokens:[{
+        acess:{
+            type: String,
+            required: true
+        },
+        token:{
+            type: String,
+            required: true
+        }
+    }]
+
 });
 
 module.exports={Client};
