@@ -1,12 +1,13 @@
 var express=require('express');
 const {ObjectID}=require('mongodb');
-var {Room}=require('../models/Room');
-var bodyParser=require('body-parser');
+
 
 var router=express.Router();
-var jsonParser=bodyParser.json();
+var {authenticate}=require('../auth');
+var {Room}=require('../models/Room');
 
-router.post('/', jsonParser, async(req,res)=>{
+
+router.post('/', async(req,res)=>{
     try{
         console.log(req.body);
         var room=new Room(req.body);

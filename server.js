@@ -9,6 +9,9 @@ var {mongoose}=require('./db/mongoose');
 var {Client}=require('./models/Client');
 var {logger}=require('./logs/logger');
 var room=require('./routes/room');
+var client=require('./routes/client');
+
+
 
 
 
@@ -36,6 +39,7 @@ const port=process.env.PORT ||3000;
 app.use(bodyParser.json());
 app.use(morgan('combined', {stream: logger.stream}));
 app.use('/room', room);
+app.use('/client', client);
 
 console.log(process.env.JWT_SECRET);
 
