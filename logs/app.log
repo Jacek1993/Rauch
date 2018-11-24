@@ -281,3 +281,5 @@
 {"message":"::1 - - [24/Nov/2018:10:12:28 +0000] \"DELETE /client/logout HTTP/1.1\" 400 2 \"-\" \"PostmanRuntime/7.3.0\"\n","level":"info"}
 {"message":"::1 - - [24/Nov/2018:10:13:06 +0000] \"DELETE /client/logout HTTP/1.1\" 400 2 \"-\" \"PostmanRuntime/7.3.0\"\n","level":"info"}
 {"message":"::1 - - [24/Nov/2018:10:16:01 +0000] \"DELETE /client/logout HTTP/1.1\" 200 - \"-\" \"PostmanRuntime/7.3.0\"\n","level":"info"}
+{"message":"::1 - - [24/Nov/2018:10:19:37 +0000] \"POST /room/reservation/13 HTTP/1.1\" 200 5 \"-\" \"PostmanRuntime/7.3.0\"\n","level":"info"}
+{"message":"::1 - - [24/Nov/2018:10:19:47 +0000] \"POST /room/reservation/13 HTTP/1.1\" 400 21 \"-\" \"PostmanRuntime/7.3.0\"\n","level":"info"}
