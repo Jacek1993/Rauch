@@ -1,8 +1,8 @@
-var winston=require('winston');
-var appRoot=require('app-root-path');
+var winston = require('winston');
+var appRoot = require('app-root-path');
 
-var options={
-    file:{
+var options = {
+    file: {
         level: 'info',
         filename: `${appRoot}/logs/app.log`,
         handleException: true,
@@ -11,7 +11,7 @@ var options={
         maxFiles: 5,
         colorize: false
     },
-    console:{
+    console: {
         level: 'debug',
         handleException: true,
         json: false,
@@ -20,11 +20,8 @@ var options={
 };
 
 
-
-
-
-var logger=winston.createLogger({
-    transports:[
+var logger = winston.createLogger({
+    transports: [
         new winston.transports.File(options.file),
         new winston.transports.Console(options.console)
     ],
@@ -33,11 +30,11 @@ var logger=winston.createLogger({
 
 
 logger.stream = {
-    write: function(message, encoding) {
+    write: function (message, encoding) {
         // use the 'info' log level so the output will be picked up by both transports (file and console)
         logger.info(message);
     },
 };
 
 
-module.exports={logger};
+module.exports = {logger};

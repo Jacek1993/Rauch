@@ -1,42 +1,41 @@
-var mongoose=require('mongoose');
-const _=require('lodash');
-const jwt=require('jsonwebtoken');
-const bcrypt=require('bcryptjs');
-const validator=require('validator');
+var mongoose = require('mongoose');
+const _ = require('lodash');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const validator = require('validator');
 
 
-
-var ClientSchema=new mongoose.Schema({
-    firstName:{
+var ClientSchema = new mongoose.Schema({
+    firstName: {
         type: String,
 
     },
-    lastName:{
+    lastName: {
         type: String,
 
     },
-    email:{
+    email: {
         type: String,
 
     },
-    telephoneNumber:{
+    telephoneNumber: {
         type: String,
 
     },
-    reservation:[{
+    reservation: [{
         type: mongoose.Schema.Types.ObjectId
     }],
-    password:{
+    password: {
         type: String,
         required: true,
         minlength: 6
     },
-    tokens:[{
-        access:{
+    tokens: [{
+        access: {
             type: String,
             required: true
         },
-        token:{
+        token: {
             type: String,
             required: true
         }
@@ -44,29 +43,29 @@ var ClientSchema=new mongoose.Schema({
 
 });
 
-ClientSchema.statics.toJson=function(){
-    var user=this;
-    var userObject=user.toObject();         //konwersja usr (document) do user object
+ClientSchema.statics.toJson = function () {
+    var user = this;
+    var userObject = user.toObject();         //konwersja usr (document) do user object
     return _.pick(userObject, ['firstName', 'lastName', 'email', '_id']);
 };
 
-ClientSchema.methods.generateAuthToken=function(){
-    var user=this;
-    var access='auth';
-    var token=jwt.sign({_id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString();
-    user.tokens=user.tokens.concat({access, token});
-    return user.save().then(()=>{
+ClientSchema.methods.generateAuthToken = function () {
+    var user = this;
+    var access = 'auth';
+    var token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
+    user.tokens = user.tokens.concat({access, token});
+    return user.save().then(() => {
         return token;
     })
 };
 
-ClientSchema.statics.findByToken=function(token){
-    var User=this;
+ClientSchema.statics.findByToken = function (token) {
+    var User = this;
     var decoded;
-    try{
-        decoded=jwt.verify(token, process.env.JWT_SECRET);
+    try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    }catch (e) {
+    } catch (e) {
         return Promise.reject(e);
     }
 
@@ -77,7 +76,7 @@ ClientSchema.statics.findByToken=function(token){
     });
 };
 
-ClientSchema.pre('save', function(next) {            //zanim zapiszemy wartosc do bazy danych chcemy by haslo podane przez uzytkownika bylo zahaszowane
+ClientSchema.pre('save', function (next) {            //zanim zapiszemy wartosc do bazy danych chcemy by haslo podane przez uzytkownika bylo zahaszowane
     var user = this;
     var password = 'abc';
     console.log(password);
@@ -87,32 +86,30 @@ ClientSchema.pre('save', function(next) {            //zanim zapiszemy wartosc d
         bcrypt.genSalt(10, (error, salt) => {
             bcrypt.hash(user.password, salt, (err, hash) => {
                 console.log('hash   ' + hash);
-                user.password=hash;
+                user.password = hash;
                 next();
             });
 
         });
-    }else
-    {
+    } else {
         next();
     }
 
 
-
 });
 
-ClientSchema.statics.findByCredentials=function (email, password) {         //wyszukujemy w bazie user'a o podanych danych jesli taki istnieje to wtedy tworzymy Promise
-    var User=this;
+ClientSchema.statics.findByCredentials = function (email, password) {         //wyszukujemy w bazie user'a o podanych danych jesli taki istnieje to wtedy tworzymy Promise
+    var User = this;
 
-    return User.findOne({email}).then((user)=>{
-        if(!user){
+    return User.findOne({email}).then((user) => {
+        if (!user) {
             return Promise.reject('Nie ma takiego usera w bazie danych');
         }
 
 
-        return new Promise((response, reject)=>{
-            bcrypt.compare(password, user.password, (err, res)=>{           //porownujemy podane haslo password z haslem odczytanym z bazy danych user.password
-                if(res){
+        return new Promise((response, reject) => {
+            bcrypt.compare(password, user.password, (err, res) => {           //porownujemy podane haslo password z haslem odczytanym z bazy danych user.password
+                if (res) {
                     response(user);
                 }
                 else
@@ -122,18 +119,18 @@ ClientSchema.statics.findByCredentials=function (email, password) {         //wy
     })
 };
 
-ClientSchema.methods.removeToken=function(token){
-    var user=this;
+ClientSchema.methods.removeToken = function (token) {
+    var user = this;
     console.log(token);
     return user.update({
-        $pull:{
-            tokens:{
+        $pull: {
+            tokens: {
                 token: token
             }
         }
     })
 };
 
-var Client=mongoose.model('Client',ClientSchema);
+var Client = mongoose.model('Client', ClientSchema);
 
-module.exports={Client};
+module.exports = {Client};

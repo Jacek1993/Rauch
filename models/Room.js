@@ -1,57 +1,55 @@
-var mongoose=require('mongoose');
+var mongoose = require('mongoose');
 
 
-
-var RoomSchema= new mongoose.Schema({
-    roomNumber:{
-        type:String,
+var RoomSchema = new mongoose.Schema({
+    roomNumber: {
+        type: String,
 
     },
-    placesNumber:{
+    placesNumber: {
         type: String,
 
     },
     price:
         [Number],
 
-    reservation:[{
-        firstName:{
+    reservation: [{
+        firstName: {
             type: String
         },
         lastName: {
             type: String
         },
-        startDate:{
+        startDate: {
             type: Date
         },
-        finishDate:{
+        finishDate: {
             type: Date
         },
-        personAmount:{
-           type: Number
+        personAmount: {
+            type: Number
         },
-        duration:{
-            type:Number
+        duration: {
+            type: Number
         },
-        identifier:{
+        identifier: {
             type: String
         }
     }],
     facilities: [String],
 });
 
-RoomSchema.statics.findAndMakeReservation= function(roomNumber, reserv){
-    var Room=this;
-    return Room.findOne({'roomNumber': roomNumber}).then((room)=>{
+RoomSchema.statics.findAndMakeReservation = function (roomNumber, reserv) {
+    var Room = this;
+    return Room.findOne({'roomNumber': roomNumber}).then((room) => {
         // console.log(room);
-        if(!room){
+        if (!room) {
             return Promise.reject('Nie ma takiego rekordu');
         }
 
 
-        var d1=new Date(reserv.finishDate);
-        var d2=new Date(reserv.startDate);
-
+        var d1 = new Date(reserv.finishDate);
+        var d2 = new Date(reserv.startDate);
 
 
         try {
@@ -63,7 +61,7 @@ RoomSchema.statics.findAndMakeReservation= function(roomNumber, reserv){
                     throw 'Ten terin jest zajety';
                 }
             });
-        }catch (e) {
+        } catch (e) {
             return Promise.reject(e);
         }
 
@@ -77,13 +75,13 @@ RoomSchema.statics.findAndMakeReservation= function(roomNumber, reserv){
             return text;
         };
 
-        reserv.identifier=makeid();
+        reserv.identifier = makeid();
         console.log(reserv.identifier);
         room.reservation.push(reserv);
 
-        return room.save().then(()=>{
+        return room.save().then(() => {
             return Promise.resolve(reserv.identifier);
-        }, (e)=>{
+        }, (e) => {
             return Promise.reject('database error');
         });
     })
@@ -108,7 +106,5 @@ RoomSchema.statics.findAndMakeReservation= function(roomNumber, reserv){
 // };
 
 
-
-
-var Room=mongoose.model('Room', RoomSchema);
-module.exports={Room};
+var Room = mongoose.model('Room', RoomSchema);
+module.exports = {Room};
